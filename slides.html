@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>reveal-md</title>
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+          document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+    </head>
+    <body>
+
+        <div class="reveal">
+            <div class="slides"><section  data-markdown><script type="text/template"># GraphQL, the future of REST API's
+
+![](./images/overview.png)
+
+> GraphQL is official released by facebook.
+</script></section><section ><section data-markdown><script type="text/template">
+## Problems of REST API
+
+* Starts simple and pure but outgrow itself quickly
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
+* Over fetching as API requirements grow
+<!-- .element: class="fragment" data-fragment-index="2" -->
+
+* Multiple round trips to render single views
+<!-- .element: class="fragment" data-fragment-index="3" -->
+
+* Documentation is none existing or outdated
+<!-- .element: class="fragment" data-fragment-index="4" -->
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none" -->
+### The complexity of REST architecture
+
+![](./images/architec-microservices.png)
+</script></section></section><section ><section data-markdown><script type="text/template">
+## GraphQL solves many of the REST problems
+
+* There is no under or over fetching. You get what you ask.
+* No more multiple round trips
+* Versioning made easy.
+* It's strongly-typed, self-documenting & has introspection
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none" -->
+### The simplicity of GraphQL
+
+![](./images/architec-graphql.png)
+</script></section><section data-markdown><script type="text/template">
+## It's more then a hype
+
+* Used at facebook for more then 4 year, recently release as open source.
+* Used at Twitter, GitHub, Pintrest, Financial Times, Thomas Cook Group, and many more.
+* Backend as a service ([Reindex](https://www.reindex.io/), [Scaphold](https://scaphold.io/#/))
+* GraphQL endpoint for: WordPress/Drupal, GitHub, PostgreSQL, Rethinkdb
+* Available in many languages and frameworks (JS, .NET, Ruby, ...)
+</script></section><section data-markdown><script type="text/template">
+## In the words of the GitHub platform team:
+
+> GraphQL represents a massive leap forward for API development. Type safety,
+> introspection, generated documentation, and predictable responses benefit
+> both the maintainers and consumers of our platform. We’re looking forward to
+> our new era of a GraphQL-backed platform, and we hope that you do, too!
+</script></section></section><section ><section data-markdown><script type="text/template">
+# The GraphQL query language
+
+> GraphQL queries look a lot like JSON objects without data.
+</script></section><section data-markdown><script type="text/template">
+### My first query
+
+```
+    query {
+        me {
+            name
+        }
+    }
+```
+
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
+```
+    // JSON result
+    data: {
+        me: {
+            name: "Peter"
+        }
+    }
+```
+
+<!-- .element: class="fragment" data-fragment-index="2" -->
+</script></section><section data-markdown><script type="text/template">
+### Query with field argument
+
+```
+    query {
+        user(id: 1234) {        <-- field argument
+            id
+            name
+        }
+    }
+```
+
+```
+    // JSON result
+    data: {
+        user: {
+            id: 1234,
+            name: "Peter"
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### Query with complex field
+
+```
+    query {
+        me {
+            name
+            profilePicture {
+                width
+                height
+                url
+            }
+        }
+    }
+```
+
+```
+    // JSON result
+    data: {
+        me: {
+            name: "Peter",
+            profilePicture {
+                "width": 50,
+                "height": 50,
+                "url": "https://cdn/some.jpg"
+            }
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### Query with size field argument
+
+```
+    query {
+        me {
+            name
+            profilePicture(size: 3000) {
+                width
+                height
+                url
+            }
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### Query with aliases
+
+```
+    query {
+        me {
+            name
+            thumbnail: profilePicture(size: 50) {
+                url
+            }
+            profilePicture(size: 3000) {
+                width
+                url
+            }
+        }
+    }
+```
+
+```
+    // JSON result
+    data: {
+        me {
+            name: "Peter",
+            thumbnail {
+                url: "https://cdn/50.jpg"
+            },
+            profilePicture {
+                width: 3000,
+                url: "https://cdn/3000.jpg"
+            }
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### Query with variables
+
+```
+    query {
+        users(id: 1) {
+            name
+        }
+    }
+```
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
+```
+    query findUser($userId: String!) {
+        users(id: $userId) {
+            name
+        }
+    }
+```
+<!-- .element: class="fragment" data-fragment-index="2" -->
+
+```
+    // variables
+    {
+        userId: 1
+    }
+```
+<!-- .element: class="fragment" data-fragment-index="3" -->
+</script></section><section data-markdown><script type="text/template">
+### Query with relations/joins
+
+```
+    {
+        me {
+            name
+            friends {
+                name
+            }
+        }
+    }
+```
+
+```
+    // JSON result
+    data: {
+        me: {
+            name: "Peter",
+            friends: [
+                { name: "bob" },
+                { name: "jan" },
+            ]
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### Query with paging and filtering
+
+```
+    {
+        me {
+            name
+            friends(orderby: IMPORTANCE, first: 1) {
+                name
+                events(first: 10) {
+                    name
+                }
+            }
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### Query Fragments
+
+```
+    query {
+        lee: user(id: "1") {
+            ...UserFragment
+        }
+        sam: user(id: "2") {
+            ...UserFragment
+        }
+    }
+
+    fragment UserFragment on User {
+        name
+        email
+    }
+```
+</script></section></section><section ><section data-markdown><script type="text/template">
+# GraphQL mutation
+
+> Mutation is like an action in Redux
+</script></section><section data-markdown><script type="text/template">
+## Simple mutation
+
+```
+    // query
+    query {
+        article(id: 1234) {
+            name
+            status
+        }
+    }
+```
+
+```
+    // mutation
+    mutation {
+        deleteArticle(id: 1234) {
+            status
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+## Complex mutation
+
+```
+    mutation newArticle {
+        createArticle(article: {
+            slug: "something-new",
+            title: "Something New",
+            status: live,
+            relatedArticles: [
+                { id: 1 }
+            ]
+        }) {
+            id
+            relatedArticles {
+                slug
+            }
+        }
+    }
+```
+</script></section></section><section ><section data-markdown><script type="text/template">
+# Advanced GraphQL queries
+</script></section><section data-markdown><script type="text/template">
+### GraphQL Directives
+
+```
+    // @skip
+    query myAwesomeQuery($latest: Boolean) {
+        oldField @skip(if: $latest)
+    }
+```
+
+```
+    // @include
+    query myAwesomeQuery($isAwesome: Boolean) {
+        awesomeField @include(if: $isAwesome)
+    }
+```
+
+> More directives to come:
+> @defer, @stream and @live
+</script></section><section data-markdown><script type="text/template">
+### GraphQL Directives
+
+We can use interfaces and union types
+
+```
+    query {
+        user(name: 'peter') {
+            name
+            email
+            ... on Manager {
+                role
+            }
+            ... on Employee {
+                managerName
+            }
+        }
+    }
+```
+
+```
+    data: {
+        user: {
+            name: "Peter",
+            managerName: "Wim"
+        }
+    }
+```
+</script></section></section><section ><section data-markdown><script type="text/template">
+# GraphQL Type System
+
+> We all love types, why not on our API's
+</script></section><section data-markdown><script type="text/template">
+## The GraphQL Schema
+
+```
+    type User {
+        name: String
+        profilePicture(size: Int = 50): ProfilePicture
+        friends(first: Int, orderby: FriendOrderEnum): [User]
+        events(first: Int): [Event]
+    }
+
+    enum FriendOrderEnum {
+        FIRST_NAME,
+        LAST_NAME,
+        IMPORTANCE
+    }
+
+    type ProfilePicture {
+        height: Int,
+        width: Int,
+        url: String
+    }
+
+    type Event {
+        name: String
+        attendees(first: Int): [User]
+    }
+
+    type Query {
+        user (id: Int): User
+        users(first: Int): [User]
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### We can query the types
+
+```
+    {
+        __schema {
+            queryType { name }
+            types {
+                name
+                    fields {
+                        name
+                        type {
+                            kind
+                            name
+                            ofType { name }
+                        }
+                    }
+                }
+            }
+        }
+    }
+```
+</script></section></section><section ><section data-markdown><script type="text/template">
+# GraphQL implementation
+</script></section><section data-markdown><script type="text/template">
+## Map code to type
+
+```
+    type User {
+        name: String
+        profilePicture(size: Int = 50): ProfilePicture
+        friends(): [User]
+    }
+```
+
+```
+    // type User {
+    {
+        // name: String
+        name(user) {
+            return user.name;
+        }
+        // profilePicture(size: Int = 50): ProfilePicture
+        profilePicture(user, { size }) {
+            return getProfilePicForUser(user, size);
+        }
+        // friends(): [User]
+        friends(user) {
+            return user.friendsIDs.map(id => getUserAsync(id));
+        }
+    }
+```
+</script></section></section><section ><section data-markdown><script type="text/template">
+# What's next
+</script></section><section data-markdown><script type="text/template">
+## Help and Information
+
+- [http://graphql.org/](http://graphql.org/)
+- [graphqlweekly](https://graphqlweekly.com/)
+- [learngraphql.com](https://learngraphql.com/)
+- [apollo-stack](https://medium.com/apollo-stack)
+- [awesome-graphql](https://github.com/chentsulin/awesome-graphql)
+</script></section><section data-markdown><script type="text/template">
+## Try-out
+
+The Star Wars Graphql API
+
+[http://graphql-swapi.parseapp.com/](http://graphql-swapi.parseapp.com/)
+
+The GitHub API
+
+[https://graphql-explorer.githubapp.com](https://graphql-explorer.githubapp.com)
+</script></section><section data-markdown><script type="text/template">
+## Upcoming Events
+- http://graphql.org/community/upcoming-events/
+</script></section><section data-markdown><script type="text/template">
+# Your next API in GraphQL
+</script></section></section></div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+              { src: 'plugin/math/math.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default',
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {
+  "controls": true,
+  "progress": true,
+  "history": true,
+  "slideNumber": true,
+  "width": 960,
+  "height": 700,
+  "margin": 0.1,
+  "minScale": 0.2,
+  "maxScale": 2
+};
+            options = extend(defaultOptions, options, queryOptions);
+            Reveal.initialize(options);
+        </script>
+        
+          <script src="/scripts/mjr-graphql"></script>
+    </body>
+</html>
+
