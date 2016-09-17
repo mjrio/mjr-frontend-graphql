@@ -72,7 +72,7 @@
 
 ### My first query
 
-```
+```json
     query {
         me {
             name
@@ -82,7 +82,7 @@
 
 <!-- .element: class="fragment" data-fragment-index="1" -->
 
-```
+```javascript
     // JSON result
     data: {
         me: {
@@ -97,7 +97,7 @@
 
 ### Query with field argument
 
-```
+```json
     query {
         user(id: 1234) {        <-- field argument
             id
@@ -106,7 +106,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         user: {
@@ -120,7 +120,7 @@
 
 ### Query with complex field
 
-```
+```json
     query {
         me {
             name
@@ -133,7 +133,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         me: {
@@ -151,7 +151,7 @@
 
 ### Query with size field argument
 
-```
+```json
     query {
         me {
             name
@@ -168,7 +168,7 @@
 
 ### Query with aliases
 
-```
+```json
     query {
         me {
             name
@@ -183,7 +183,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         me {
@@ -203,7 +203,7 @@
 
 ### Query with variables
 
-```
+```json
     query {
         users(id: 1) {
             name
@@ -212,7 +212,7 @@
 ```
 <!-- .element: class="fragment" data-fragment-index="1" -->
 
-```
+```json
     query findUser($userId: String!) {
         users(id: $userId) {
             name
@@ -221,7 +221,7 @@
 ```
 <!-- .element: class="fragment" data-fragment-index="2" -->
 
-```
+```javascript
     // variables
     {
         userId: 1
@@ -233,8 +233,8 @@
 
 ### Query with relations/joins
 
-```
-    {
+```json
+    query {
         me {
             name
             friends {
@@ -244,7 +244,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         me: {
@@ -261,8 +261,8 @@
 
 ### Query with paging and filtering
 
-```
-    {
+```json
+    query {
         me {
             name
             friends(orderby: IMPORTANCE, first: 1) {
@@ -279,7 +279,7 @@
 
 ### Query Fragments
 
-```
+```json
     query {
         lee: user(id: "1") {
             ...UserFragment
@@ -305,7 +305,7 @@
 
 ## Simple mutation
 
-```
+```json
     // query
     query {
         article(id: 1234) {
@@ -315,7 +315,7 @@
     }
 ```
 
-```
+```json
     // mutation
     mutation {
         deleteArticle(id: 1234) {
@@ -328,7 +328,7 @@
 
 ## Complex mutation
 
-```
+```json
     mutation newArticle {
         createArticle(article: {
             slug: "something-new",
@@ -354,14 +354,14 @@
 
 ### GraphQL Directives
 
-```
+```json
     // @skip
     query myAwesomeQuery($latest: Boolean) {
         oldField @skip(if: $latest)
     }
 ```
 
-```
+```json
     // @include
     query myAwesomeQuery($isAwesome: Boolean) {
         awesomeField @include(if: $isAwesome)
@@ -377,7 +377,7 @@
 
 We can use interfaces and union types
 
-```
+```json
     query {
         user(name: 'peter') {
             name
@@ -392,7 +392,7 @@ We can use interfaces and union types
     }
 ```
 
-```
+```javascript
     data: {
         user: {
             name: "Peter",
@@ -411,7 +411,7 @@ We can use interfaces and union types
 
 ## The GraphQL Schema
 
-```
+```json
     type User {
         name: String
         profilePicture(size: Int = 50): ProfilePicture
@@ -446,8 +446,8 @@ We can use interfaces and union types
 
 ### We can query the types
 
-```
-    {
+```json
+    query {
         __schema {
             queryType { name }
             types {
@@ -474,7 +474,7 @@ We can use interfaces and union types
 
 ## Map code to type
 
-```
+```json
     type User {
         name: String
         profilePicture(size: Int = 50): ProfilePicture
@@ -482,7 +482,7 @@ We can use interfaces and union types
     }
 ```
 
-```
+```javascript
     // type User {
     {
         // name: String
