@@ -533,4 +533,4 @@ The GitHub API
 
 ----
 
-# Your next API in GraphQL
+# Your next API in GraphQL?

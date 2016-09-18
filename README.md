@@ -1,8 +1,10 @@
-# How to view the presentation
+# mjr-graphql
 
-    > open slides/index.html
+## View
 
-# How to edit/run the presentation
+[https://cdn.rawgit.com/mjrio/mjr-graphql/master/slides/index.html#/](https://cdn.rawgit.com/mjrio/mjr-graphql/master/slides/index.html#/)
+
+## Edit and run
 
     // install reveal-md
     > npm install -g reveal-md
@@ -10,10 +12,11 @@
     // open it
     > reveal-md slides.md --title GraphQL
 
-    // edit it
-    subl slides.md
+You can edit the presentation in 'slides.md'
 
-# How to run the sample
+> Thats all :)
+
+## Sample
 
 Prepare
 
@@ -23,4 +26,6 @@ Prepare
 
 Open [http://localhost:3000/graphiql](http://localhost:3000/graphiql)
 
-> Thats all :)
+---
+
+
