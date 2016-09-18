@@ -1,10 +1,17 @@
 # How to view the presentation
 
+    > open slides/index.html
+
+# How to edit/run the presentation
+
     // install reveal-md
     > npm install -g reveal-md
 
     // open it
-    > reveal-md slides.md --title ES6
+    > reveal-md slides.md --title GraphQL
+
+    // edit it
+    subl slides.md
 
 # How to run the sample
 
