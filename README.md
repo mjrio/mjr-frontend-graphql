@@ -2,15 +2,18 @@
 
 ## View
 
-[https://cdn.rawgit.com/mjrio/mjr-graphql/master/slides/index.html#/](https://cdn.rawgit.com/mjrio/mjr-graphql/master/slides/index.html#/)
+Click [here](https://rawgit.com/mjrio/mjr-graphql/master/slides/index.html#/) to open the presentation.
 
 ## Edit and run
 
     // install reveal-md
     > npm install -g reveal-md
 
-    // open it
-    > reveal-md slides.md --title GraphQL
+    // open it (dark)
+    > reveal-md slides.md --title 'GraphQL, the future of REST API's' --theme moon
+
+    // other theme (light)
+    > reveal-md slides.md --title 'GraphQL, the future of REST API's' --theme solarized --highlightTheme github-gist
 
 You can edit the presentation in 'slides.md'
 
