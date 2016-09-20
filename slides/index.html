@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>reveal-md</title>
+        <title>GraphQL, the future of REST API's</title>
         <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="css/theme/moon.css" id="theme">
         <!-- For syntax highlighting -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
 
@@ -21,6 +21,10 @@
 ![](./images/overview.png)
 
 > GraphQL is official released by facebook.
+</script></section><section  data-markdown><script type="text/template">
+# mjr
+
+http://github.com/mjrio/mjr-graphql
 </script></section><section ><section data-markdown><script type="text/template">
 ## Problems of REST API
 
@@ -44,9 +48,16 @@
 ## GraphQL solves many of the REST problems
 
 * There is no under or over fetching. You get what you ask.
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
 * No more multiple round trips
+<!-- .element: class="fragment" data-fragment-index="2" -->
+
 * Versioning made easy.
+<!-- .element: class="fragment" data-fragment-index="3" -->
+
 * It's strongly-typed, self-documenting & has introspection
+<!-- .element: class="fragment" data-fragment-index="4" -->
 </script></section><section data-markdown><script type="text/template">
 <!-- .slide: data-transition="none" -->
 ### The simplicity of GraphQL
@@ -58,7 +69,7 @@
 * Used at facebook for more then 4 year, recently release as open source.
 * Used at Twitter, GitHub, Pintrest, Financial Times, Thomas Cook Group, and many more.
 * Backend as a service ([Reindex](https://www.reindex.io/), [Scaphold](https://scaphold.io/#/))
-* GraphQL endpoint for: WordPress/Drupal, GitHub, PostgreSQL, Rethinkdb
+* GraphQL endpoint for: WordPress/Drupal, [GitHub](https://medium.com/apollo-stack/the-new-github-graphql-api-811b005d1b6e#.yhrl0cep2), PostgreSQL, Rethinkdb
 * Available in many languages and frameworks (JS, .NET, Ruby, ...)
 </script></section><section data-markdown><script type="text/template">
 ## In the words of the GitHub platform team:
@@ -68,13 +79,11 @@
 > both the maintainers and consumers of our platform. We’re looking forward to
 > our new era of a GraphQL-backed platform, and we hope that you do, too!
 </script></section></section><section ><section data-markdown><script type="text/template">
-# The GraphQL query language
-
-> GraphQL queries look a lot like JSON objects without data.
+# How it works
 </script></section><section data-markdown><script type="text/template">
-### My first query
+### A graphql query
 
-```
+```json
     query {
         me {
             name
@@ -82,9 +91,9 @@
     }
 ```
 
-<!-- .element: class="fragment" data-fragment-index="1" -->
+> GraphQL queries look a lot like JSON objects without data.
 
-```
+```javascript
     // JSON result
     data: {
         me: {
@@ -92,12 +101,69 @@
         }
     }
 ```
+<!-- .element: class="fragment" data-fragment-index="1" -->
+</script></section><section data-markdown><script type="text/template">
+### Another graphql query
 
-<!-- .element: class="fragment" data-fragment-index="2" -->
+Get list of users
+
+```json
+    query {
+        users {
+            name
+            role
+        }
+    }
+```
+
+```javascript
+    // JSON result
+    data: {
+        users: [
+            { name: "Peter", role: "admin" },
+            { name: "Jan", role: "admin" }
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### A GraphQL type
+
+User Type
+
+```json
+    type User {
+        name: String
+        role: String
+    }
+
+    type Query {
+        users(): [User]
+    }
+```
+
+mapped to code
+
+```javascript
+    // type Query {
+    {
+        // name: String
+        users() {
+            return users;
+        }
+    }
+```
+</script></section><section data-markdown><script type="text/template">
+### GraphiQL
+
+![](./images/graphiql.png)
+</script></section></section><section ><section data-markdown><script type="text/template">
+# The GraphQL query language
+
+> Lets go in detail
 </script></section><section data-markdown><script type="text/template">
 ### Query with field argument
 
-```
+```json
     query {
         user(id: 1234) {        <-- field argument
             id
@@ -106,7 +172,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         user: {
@@ -118,7 +184,7 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query with complex field
 
-```
+```json
     query {
         me {
             name
@@ -131,7 +197,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         me: {
@@ -147,7 +213,7 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query with size field argument
 
-```
+```json
     query {
         me {
             name
@@ -162,7 +228,7 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query with aliases
 
-```
+```json
     query {
         me {
             name
@@ -177,7 +243,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         me {
@@ -195,7 +261,7 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query with variables
 
-```
+```json
     query {
         users(id: 1) {
             name
@@ -204,7 +270,7 @@
 ```
 <!-- .element: class="fragment" data-fragment-index="1" -->
 
-```
+```json
     query findUser($userId: String!) {
         users(id: $userId) {
             name
@@ -213,7 +279,7 @@
 ```
 <!-- .element: class="fragment" data-fragment-index="2" -->
 
-```
+```javascript
     // variables
     {
         userId: 1
@@ -223,8 +289,8 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query with relations/joins
 
-```
-    {
+```json
+    query {
         me {
             name
             friends {
@@ -234,7 +300,7 @@
     }
 ```
 
-```
+```javascript
     // JSON result
     data: {
         me: {
@@ -249,8 +315,8 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query with paging and filtering
 
-```
-    {
+```json
+    query {
         me {
             name
             friends(orderby: IMPORTANCE, first: 1) {
@@ -265,7 +331,7 @@
 </script></section><section data-markdown><script type="text/template">
 ### Query Fragments
 
-```
+```json
     query {
         lee: user(id: "1") {
             ...UserFragment
@@ -287,7 +353,7 @@
 </script></section><section data-markdown><script type="text/template">
 ## Simple mutation
 
-```
+```json
     // query
     query {
         article(id: 1234) {
@@ -297,7 +363,7 @@
     }
 ```
 
-```
+```json
     // mutation
     mutation {
         deleteArticle(id: 1234) {
@@ -308,7 +374,7 @@
 </script></section><section data-markdown><script type="text/template">
 ## Complex mutation
 
-```
+```json
     mutation newArticle {
         createArticle(article: {
             slug: "something-new",
@@ -330,14 +396,14 @@
 </script></section><section data-markdown><script type="text/template">
 ### GraphQL Directives
 
-```
+```json
     // @skip
     query myAwesomeQuery($latest: Boolean) {
         oldField @skip(if: $latest)
     }
 ```
 
-```
+```json
     // @include
     query myAwesomeQuery($isAwesome: Boolean) {
         awesomeField @include(if: $isAwesome)
@@ -351,7 +417,7 @@
 
 We can use interfaces and union types
 
-```
+```json
     query {
         user(name: 'peter') {
             name
@@ -366,7 +432,7 @@ We can use interfaces and union types
     }
 ```
 
-```
+```javascript
     data: {
         user: {
             name: "Peter",
@@ -381,7 +447,7 @@ We can use interfaces and union types
 </script></section><section data-markdown><script type="text/template">
 ## The GraphQL Schema
 
-```
+```json
     type User {
         name: String
         profilePicture(size: Int = 50): ProfilePicture
@@ -391,10 +457,11 @@ We can use interfaces and union types
 
     enum FriendOrderEnum {
         FIRST_NAME,
-        LAST_NAME,
         IMPORTANCE
     }
 
+```
+```json
     type ProfilePicture {
         height: Int,
         width: Int,
@@ -414,19 +481,18 @@ We can use interfaces and union types
 </script></section><section data-markdown><script type="text/template">
 ### We can query the types
 
-```
-    {
+```json
+    query {
         __schema {
             queryType { name }
             types {
                 name
-                    fields {
+                fields {
+                    name
+                    type {
+                        kind
                         name
-                        type {
-                            kind
-                            name
-                            ofType { name }
-                        }
+                        ofType { name }
                     }
                 }
             }
@@ -434,37 +500,13 @@ We can use interfaces and union types
     }
 ```
 </script></section></section><section ><section data-markdown><script type="text/template">
-# GraphQL implementation
-</script></section><section data-markdown><script type="text/template">
-## Map code to type
-
-```
-    type User {
-        name: String
-        profilePicture(size: Int = 50): ProfilePicture
-        friends(): [User]
-    }
-```
-
-```
-    // type User {
-    {
-        // name: String
-        name(user) {
-            return user.name;
-        }
-        // profilePicture(size: Int = 50): ProfilePicture
-        profilePicture(user, { size }) {
-            return getProfilePicForUser(user, size);
-        }
-        // friends(): [User]
-        friends(user) {
-            return user.friendsIDs.map(id => getUserAsync(id));
-        }
-    }
-```
-</script></section></section><section ><section data-markdown><script type="text/template">
 # What's next
+</script></section><section data-markdown><script type="text/template">
+## Reactive Graphql
+
+![](./images/reactive-graphql.png)
+
+2017 - Meteor’s Reactive GraphQL(Apollo)
 </script></section><section data-markdown><script type="text/template">
 ## Help and Information
 
@@ -487,7 +529,7 @@ The GitHub API
 ## Upcoming Events
 - http://graphql.org/community/upcoming-events/
 </script></section><section data-markdown><script type="text/template">
-# Your next API in GraphQL
+# Your next API in GraphQL?
 </script></section></section></div>
         </div>
 
@@ -539,8 +581,10 @@ The GitHub API
   "width": 960,
   "height": 700,
   "margin": 0.1,
-  "minScale": 0.2,
-  "maxScale": 2
+  "minScale": 1,
+  "maxScale": 1,
+  "transition": "fade",
+  "transition-speed": "slow"
 };
             options = extend(defaultOptions, options, queryOptions);
             Reveal.initialize(options);

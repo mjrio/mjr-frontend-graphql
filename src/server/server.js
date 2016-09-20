@@ -15,14 +15,12 @@ app.use(bodyParser.json());
 const myGraphQLSchema = buildSchema(`
     # The User
     type User {
-        # Name of the user
         name: String
-        # Role of the user (guest|user|admin)
         role: String
     }
+
     # The root of all queries
     type Query {
-        # Returns a list of users
         users: [User]
     }
 `);

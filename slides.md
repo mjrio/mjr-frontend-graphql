@@ -6,6 +6,12 @@
 
 ---
 
+# mjr
+
+http://github.com/mjrio/mjr-graphql
+
+---
+
 ## Problems of REST API
 
 * Starts simple and pure but outgrow itself quickly
@@ -32,9 +38,16 @@
 ## GraphQL solves many of the REST problems
 
 * There is no under or over fetching. You get what you ask.
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
 * No more multiple round trips
+<!-- .element: class="fragment" data-fragment-index="2" -->
+
 * Versioning made easy.
+<!-- .element: class="fragment" data-fragment-index="3" -->
+
 * It's strongly-typed, self-documenting & has introspection
+<!-- .element: class="fragment" data-fragment-index="4" -->
 
 ----
 
@@ -50,7 +63,7 @@
 * Used at facebook for more then 4 year, recently release as open source.
 * Used at Twitter, GitHub, Pintrest, Financial Times, Thomas Cook Group, and many more.
 * Backend as a service ([Reindex](https://www.reindex.io/), [Scaphold](https://scaphold.io/#/))
-* GraphQL endpoint for: WordPress/Drupal, GitHub, PostgreSQL, Rethinkdb
+* GraphQL endpoint for: WordPress/Drupal, [GitHub](https://medium.com/apollo-stack/the-new-github-graphql-api-811b005d1b6e#.yhrl0cep2), PostgreSQL, Rethinkdb
 * Available in many languages and frameworks (JS, .NET, Ruby, ...)
 
 ----
@@ -64,13 +77,11 @@
 
 ---
 
-# The GraphQL query language
-
-> GraphQL queries look a lot like JSON objects without data.
+# How it works
 
 ----
 
-### My first query
+### A graphql query
 
 ```json
     query {
@@ -80,7 +91,7 @@
     }
 ```
 
-<!-- .element: class="fragment" data-fragment-index="1" -->
+> GraphQL queries look a lot like JSON objects without data.
 
 ```javascript
     // JSON result
@@ -90,8 +101,73 @@
         }
     }
 ```
+<!-- .element: class="fragment" data-fragment-index="1" -->
 
-<!-- .element: class="fragment" data-fragment-index="2" -->
+----
+
+### Another graphql query
+
+Get list of users
+
+```json
+    query {
+        users {
+            name
+            role
+        }
+    }
+```
+
+```javascript
+    // JSON result
+    data: {
+        users: [
+            { name: "Peter", role: "admin" },
+            { name: "Jan", role: "admin" }
+        }
+    }
+```
+
+----
+
+### A GraphQL type
+
+User Type
+
+```json
+    type User {
+        name: String
+        role: String
+    }
+
+    type Query {
+        users(): [User]
+    }
+```
+
+mapped to code
+
+```javascript
+    // type Query {
+    {
+        // name: String
+        users() {
+            return users;
+        }
+    }
+```
+
+----
+
+### GraphiQL
+
+![](./images/graphiql.png)
+
+---
+
+# The GraphQL query language
+
+> Lets go in detail
 
 ----
 
@@ -421,10 +497,11 @@ We can use interfaces and union types
 
     enum FriendOrderEnum {
         FIRST_NAME,
-        LAST_NAME,
         IMPORTANCE
     }
 
+```
+```json
     type ProfilePicture {
         height: Int,
         width: Int,
@@ -452,13 +529,12 @@ We can use interfaces and union types
             queryType { name }
             types {
                 name
-                    fields {
+                fields {
+                    name
+                    type {
+                        kind
                         name
-                        type {
-                            kind
-                            name
-                            ofType { name }
-                        }
+                        ofType { name }
                     }
                 }
             }
@@ -468,41 +544,15 @@ We can use interfaces and union types
 
 ---
 
-# GraphQL implementation
+# What's next
 
 ----
 
-## Map code to type
+## Reactive Graphql
 
-```json
-    type User {
-        name: String
-        profilePicture(size: Int = 50): ProfilePicture
-        friends(): [User]
-    }
-```
+![](./images/reactive-graphql.png)
 
-```javascript
-    // type User {
-    {
-        // name: String
-        name(user) {
-            return user.name;
-        }
-        // profilePicture(size: Int = 50): ProfilePicture
-        profilePicture(user, { size }) {
-            return getProfilePicForUser(user, size);
-        }
-        // friends(): [User]
-        friends(user) {
-            return user.friendsIDs.map(id => getUserAsync(id));
-        }
-    }
-```
-
----
-
-# What's next
+2017 - Meteor’s Reactive GraphQL(Apollo)
 
 ----
 

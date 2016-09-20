@@ -18,30 +18,56 @@ const typeDefs = [`
 
     type RootQuery {
         users: [User]
+        user(filter: String): User
     }
 
     type User {
         name: String
         role: String
+        picture: ProfilePicture
+    }
+
+    type ProfilePicture {
+        url: String
+        height: Int
+        width: Int
     }
 `];
 
+const users = [
+    { 
+        name: 'peter', 
+        role: 'admin', 
+        profilePicture: { 
+            url: 'http://lorempixel.com/400/200/people/', 
+            width: 400,
+            height: 200
+        }
+    },
+    { 
+        name: 'jan', 
+        role: 'guest' 
+    },
+]
 const resolvers = {
     RootQuery: {
         users() {
-            return [
-                { name: 'peter', role: 'admin' },
-                { name: 'jan', role: 'guest' },
-            ];
+            return users;
         },
+        user(root, { filter }) {
+            return users.find(user => user.name === filter);
+        }
     },
+    User: {
+        picture(user) {
+            return user.profilePicture;
+        }
+    }
 };
 
 const myGraphQLSchema = makeExecutableSchema({
     typeDefs,
     resolvers,
-    // connectors,
-    // logger,
 });
 
 // GraphQL server
@@ -57,6 +83,11 @@ app.use('/api/graphql', apolloExpress({
 // GraphiQL UI
 app.use('/graphiql', graphiqlExpress({
     endpointURL: '/api/graphql',
+    query: `query { 
+  users { 
+    name 
+  }
+}`,
 }));
 
 app.listen(PORT, () => {
