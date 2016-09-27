@@ -35,20 +35,21 @@ const typeDefs = [`
 `];
 
 const users = [
-    { 
-        name: 'peter', 
-        role: 'admin', 
-        profilePicture: { 
-            url: 'http://lorempixel.com/400/200/people/', 
+    {
+        name: 'peter',
+        role: 'admin',
+        profilePicture: {
+            url: 'http://lorempixel.com/400/200/people/',
             width: 400,
-            height: 200
-        }
+            height: 200,
+        },
     },
-    { 
-        name: 'jan', 
-        role: 'guest' 
+    {
+        name: 'jan',
+        role: 'guest',
     },
-]
+];
+
 const resolvers = {
     RootQuery: {
         users() {
@@ -56,13 +57,13 @@ const resolvers = {
         },
         user(root, { filter }) {
             return users.find(user => user.name === filter);
-        }
+        },
     },
     User: {
         picture(user) {
             return user.profilePicture;
-        }
-    }
+        },
+    },
 };
 
 const myGraphQLSchema = makeExecutableSchema({

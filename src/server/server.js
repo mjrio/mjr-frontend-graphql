@@ -25,7 +25,7 @@ const myGraphQLSchema = buildSchema(`
     }
 `);
 
-// build property resolvers
+// property resolvers
 const root = {
     users() {
         return [
@@ -35,14 +35,14 @@ const root = {
     },
 };
 
-// GraphQL server
+// Route GraphQL server
 // http://dev.apollodata.com/tools/apollo-server/setup.html
 app.use('/api/graphql', apolloExpress({
     schema: myGraphQLSchema,
     rootValue: root,
 }));
 
-// GraphiQL UI
+// Route GraphiQL UI
 app.use('/graphiql', graphiqlExpress({
     endpointURL: '/api/graphql',
 }));
